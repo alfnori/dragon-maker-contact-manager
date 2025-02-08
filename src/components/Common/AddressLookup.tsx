@@ -14,6 +14,7 @@ export const AddressLookup: React.FC<AddressLookupProps> = ({
   const [addresses, setAddresses] = useState([]);
 
   const handleLookup = async () => {
+    setAddresses([]);
     // const addressData = await getAddressByCEP(cep);
     // if (addressData) {
     //   setAddresses([addressData]);
