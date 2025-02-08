@@ -1,6 +1,6 @@
 import { Box, Card, Container, Grid2, Typography } from '@mui/material';
 import React from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router';
 import Logo from '../components/Common/Logo';
 
 export const AuthenticateLayout: React.FC = () => {
@@ -8,7 +8,6 @@ export const AuthenticateLayout: React.FC = () => {
     <Container>
       <Grid2
         sx={{
-          marginTop: 8,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -27,6 +26,7 @@ export const AuthenticateLayout: React.FC = () => {
         >
           <Card
             sx={{
+              marginTop: 8,
               padding: 8,
               display: 'flex',
               flexDirection: 'column',

@@ -7,7 +7,7 @@ const themeOptions: ThemeOptions = {
       main: '#2ec7d6',
     },
     secondary: {
-      main: '#f50057',
+      main: '#db404b',
     },
   },
   spacing: 8,
@@ -38,6 +38,19 @@ const themeOptions: ThemeOptions = {
       complex: 375,
       enteringScreen: 225,
       leavingScreen: 195,
+    },
+  },
+  components: {
+    MuiCssBaseline: {
+      styleOverrides: {
+        ':root': {
+          background: 'linear-gradient(45deg, #2ec7d6 30%, #db404b 90%)',
+          height: '100vh',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        },
+      },
     },
   },
 };

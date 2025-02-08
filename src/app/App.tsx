@@ -1,18 +1,22 @@
 import './App.css';
 
 import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider } from '../contexts/AuthContext';
+import { BrowserRouter, Route, Routes } from 'react-router';
 import { Login } from '../components/Auth/Login';
 import { Register } from '../components/Auth/Register';
-import { PrivateRoute } from '../components/Common/PrivateRoute';
+import { AuthProvider } from '../contexts/AuthContext';
 import { AuthenticateLayout } from '../layouts/AuthenticateLayout';
+import { PrivateRoute } from '../router/PrivateRoute';
+import { Error } from '../components/Error/Error';
+import { Home } from '../components/Home/Home';
 
 const App: React.FC = () => {
   return (
     <AuthProvider>
       <BrowserRouter>
         <Routes>
+          <Route path="/" element={<Home />} />
+
           <Route element={<AuthenticateLayout />}>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
@@ -20,13 +24,10 @@ const App: React.FC = () => {
 
           <Route
             path="/contacts"
-            element={
-              <PrivateRoute>
-                <div>Contact Page!</div>
-              </PrivateRoute>
-            }
+            element={<PrivateRoute element={<div>Contact List</div>} />}
           />
-          <Route path="/" element={<Navigate to="/contacts" />} />
+
+          <Route path="*" element={<Error />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
