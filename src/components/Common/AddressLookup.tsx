@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from 'react';
 import { TextField, Button, List, ListItem, ListItemText } from '@mui/material';
-import { getAddressByCEP } from '../../services/apiService';
+// import { getAddressByCEP } from '../../services/apiService';
 
 interface AddressLookupProps {
   onAddressSelect: (address: any) => void;
@@ -14,10 +14,10 @@ export const AddressLookup: React.FC<AddressLookupProps> = ({
   const [addresses, setAddresses] = useState([]);
 
   const handleLookup = async () => {
-    const addressData = await getAddressByCEP(cep);
-    if (addressData) {
-      setAddresses([addressData]);
-    }
+    // const addressData = await getAddressByCEP(cep);
+    // if (addressData) {
+    //   setAddresses([addressData]);
+    // }
   };
 
   return (
