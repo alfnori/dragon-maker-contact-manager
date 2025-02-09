@@ -1,15 +1,18 @@
 import CodeIcon from '@mui/icons-material/Code';
+import ForwardIcon from '@mui/icons-material/Forward';
 import MapIcon from '@mui/icons-material/Map';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import StorageIcon from '@mui/icons-material/Storage';
 import {
   Box,
+  Button,
   Card,
   CardContent,
   Container,
   Fade,
   Grid2 as Grid,
   Grid2,
+  Link,
   Paper,
   Typography,
   useTheme,
@@ -20,21 +23,58 @@ import Logo from '../Common/Logo';
 export const Home: React.FC = () => {
   const theme = useTheme();
 
+  const MyPaper = (props: { children: React.ReactNode }) => (
+    <Paper
+      elevation={3}
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        p: 4,
+        mt: 4,
+        mb: 4,
+        borderRadius: 2,
+        ':hover': {
+          transform: 'scale(1.02)',
+          transition: 'transform 0.3s ease-in-out',
+          cursor: 'pointer',
+        },
+      }}
+    >
+      {props.children}
+    </Paper>
+  );
+
+  const MyCard = (props: { children: React.ReactNode }) => (
+    <Card
+      sx={{
+        height: '100%',
+        ':hover': {
+          transform: 'scale(1.02)',
+          transition: 'transform 0.3s ease-in-out',
+          cursor: 'pointer',
+        },
+      }}
+    >
+      {props.children}
+    </Card>
+  );
+
   return (
     <Container
       maxWidth="lg"
       sx={{
+        display: 'inline-grid',
         maxHeight: '100vh',
         overflow: 'auto',
         '&::-webkit-scrollbar': {
           display: 'none',
         },
-        '-ms-overflow-style': 'none',
         scrollbarWidth: 'none',
         msOverflowStyle: 'none',
       }}
     >
-      <Box sx={{ m: 4, mb: 8 }}>
+      <Box sx={{ m: 4, mb: 4, display: 'flex', flexDirection: 'column' }}>
         <Fade in={true} timeout={1000}>
           <Grid2
             sx={{
@@ -47,49 +87,35 @@ export const Home: React.FC = () => {
               sx={{
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center',
-                mr: 2,
-              }}
-            >
-              <Logo size={120} />
-            </Grid2>
-            <Grid2
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
+                alignContent: 'center',
                 justifyContent: 'center',
                 ml: 2,
               }}
             >
-              <Typography
+              <Logo size={120} link="/contacts" />
+              <Link
                 variant="h2"
-                component="h1"
+                component="a"
+                underline="hover"
                 align="center"
                 alignSelf="end"
                 gutterBottom
+                href="/contacts"
                 sx={{
                   color: theme.palette.primary.main,
+                  alignSelf: 'center',
                   fontWeight: 'bold',
                   mb: 0,
                   fontSize: { xs: '2rem', sm: '3rem' },
                 }}
               >
                 The Tale of the Dragon Maker
-              </Typography>
+              </Link>
             </Grid2>
           </Grid2>
         </Fade>
 
-        <Paper
-          elevation={3}
-          sx={{
-            p: 4,
-            mt: 4,
-            mb: 4,
-            backgroundColor: theme.palette.background.paper,
-            borderRadius: 2,
-          }}
-        >
+        <MyPaper>
           <Typography variant="body1" paragraph>
             Once upon a time, in the bustling realm of software development,
             there lived an aspiring developer who dreamed of joining the
@@ -101,11 +127,11 @@ export const Home: React.FC = () => {
             that would determine if they were worthy of joining this prestigious
             group.
           </Typography>
-        </Paper>
+        </MyPaper>
 
-        <Grid container spacing={4} sx={{ mb: 4 }}>
+        <Grid container spacing={4}>
           <Grid size={{ xs: 12, md: 6 }}>
-            <Card sx={{ height: '100%' }}>
+            <MyCard>
               <CardContent>
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                   <PersonAddIcon
@@ -118,11 +144,11 @@ export const Home: React.FC = () => {
                   their presence in the realm with a special login enchantment.
                 </Typography>
               </CardContent>
-            </Card>
+            </MyCard>
           </Grid>
 
           <Grid size={{ xs: 12, md: 6 }}>
-            <Card sx={{ height: '100%' }}>
+            <MyCard>
               <CardContent>
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                   <StorageIcon
@@ -136,11 +162,11 @@ export const Home: React.FC = () => {
                   CPF in the mystic tongue).
                 </Typography>
               </CardContent>
-            </Card>
+            </MyCard>
           </Grid>
 
           <Grid size={{ xs: 12, md: 6 }}>
-            <Card sx={{ height: '100%' }}>
+            <MyCard>
               <CardContent>
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                   <CodeIcon sx={{ mr: 2, color: theme.palette.error.main }} />
@@ -151,11 +177,11 @@ export const Home: React.FC = () => {
                   address in the kingdom just by uttering its postal code.
                 </Typography>
               </CardContent>
-            </Card>
+            </MyCard>
           </Grid>
 
           <Grid size={{ xs: 12, md: 6 }}>
-            <Card sx={{ height: '100%' }}>
+            <MyCard>
               <CardContent>
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                   <MapIcon sx={{ mr: 2, color: theme.palette.success.main }} />
@@ -166,18 +192,11 @@ export const Home: React.FC = () => {
                   contact with a magical pin.
                 </Typography>
               </CardContent>
-            </Card>
+            </MyCard>
           </Grid>
         </Grid>
 
-        <Paper
-          elevation={3}
-          sx={{
-            p: 4,
-            backgroundColor: theme.palette.background.paper,
-            borderRadius: 2,
-          }}
-        >
+        <MyPaper>
           <Typography variant="h5" gutterBottom color="primary">
             The Developer's Tools
           </Typography>
@@ -195,13 +214,38 @@ export const Home: React.FC = () => {
             to complete the quest will be valued greatly by the Dragon Makers."
           </Typography>
 
-          <Typography
-            variant="body1"
-            sx={{ fontStyle: 'italic', mt: 4, textAlign: 'center' }}
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              alignContent: 'center',
+              justifyContent: 'center',
+              mb: 2,
+            }}
           >
-            (To be continued... after npm install finishes running)
-          </Typography>
-        </Paper>
+            <Typography
+              variant="body1"
+              sx={{ fontStyle: 'italic', textAlign: 'center' }}
+            >
+              Are you ready?
+            </Typography>
+
+            <ForwardIcon fontSize="large" sx={{ mx: 1 }} />
+
+            <Button
+              variant="contained"
+              href="/contacts"
+              size="large"
+              sx={{
+                color: theme.palette.secondary.contrastText,
+                fontWeight: 'bold',
+                textDecoration: 'none',
+              }}
+            >
+              Start the Quest
+            </Button>
+          </Box>
+        </MyPaper>
       </Box>
     </Container>
   );
