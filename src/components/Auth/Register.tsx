@@ -1,52 +1,122 @@
-import { Box, Button, TextField, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  FormHelperText,
+  TextField,
+  Typography,
+} from '@mui/material';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
+import * as Yup from 'yup';
+import useForm, { FormErrors } from '../../hooks/useForm';
 import { useAuth } from '../../contexts/useAuth';
-import { validateEmail } from '../../utils/validation';
+
+interface RegisterFormState {
+  name: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+}
 
 export const Register: React.FC = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState('');
   const navigate = useNavigate();
-  const { register } = useAuth();
+  const { signUp } = useAuth();
 
-  const handleRegister = (e: React.FormEvent) => {
-    e.preventDefault();
+  const [formError, setFormError] = useState('');
 
-    if (!validateEmail(email)) {
-      setError('Invalid email format');
-      return;
+  const validationSchema = Yup.object().shape({
+    name: Yup.string().required('Required'),
+    email: Yup.string().email('Invalid email').required('Required'),
+    password: Yup.string().min(6, 'Too Short!').required('Required'),
+    confirmPassword: Yup.string()
+      .min(6, 'Too Short!')
+      .oneOf([Yup.ref('password'), ''], 'Passwords must match')
+      .required('Required'),
+  });
+
+  const handleSubmit = async (
+    data: RegisterFormState,
+    errors: FormErrors<RegisterFormState>
+  ) => {
+    console.log('formData', data);
+    console.log('errors', errors);
+
+    if (Object.entries(errors).length) {
+      return false;
     }
 
-    if (password !== confirmPassword) {
-      setError('Passwords do not match');
-      return;
-    }
+    const { name, email, password } = data;
+    const success = signUp(name, email, password);
 
-    const success = register(email, password);
+    console.log(name, email, password, success);
 
     if (success) {
       navigate('/contacts');
     } else {
-      setError('Email already registered');
+      setFormError('Email already registered');
     }
+
+    return data;
   };
+
+  const initialState: RegisterFormState = {
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+  };
+
+  const { errors, register, formSubmit } = useForm<RegisterFormState>(
+    handleSubmit,
+    initialState,
+    validationSchema
+  );
+
+  const ErrorField = ({
+    formProp,
+  }: {
+    formProp: keyof FormErrors<RegisterFormState>;
+  }) => {
+    return (
+      <FormHelperText error={!!errors[formProp]} sx={{ width: '100%' }}>
+        {errors[formProp]}
+      </FormHelperText>
+    );
+  };
+
+  const formErrorMessage = errors['__main'] || formError;
 
   return (
     <Box>
       <Typography component="h1" variant="h5">
         Sign Up
       </Typography>
-      <Box component="form" onSubmit={handleRegister} sx={{ mt: 1 }}>
+      <Box component="form" sx={{ mt: 1 }} onSubmit={formSubmit} noValidate>
+        <TextField
+          margin="normal"
+          required
+          fullWidth
+          label="Name"
+          slotProps={{
+            formHelperText: {
+              error: !!errors.name,
+            },
+          }}
+          helperText={<ErrorField formProp="name" />}
+          {...register('name')}
+        />
         <TextField
           margin="normal"
           required
           fullWidth
           label="Email Address"
-          value={email}
-          onChange={e => setEmail(e.target.value)}
+          slotProps={{
+            formHelperText: {
+              error: !!errors.email,
+            },
+          }}
+          helperText={<ErrorField formProp="email" />}
+          {...register('email')}
         />
         <TextField
           margin="normal"
@@ -54,8 +124,13 @@ export const Register: React.FC = () => {
           fullWidth
           label="Password"
           type="password"
-          value={password}
-          onChange={e => setPassword(e.target.value)}
+          slotProps={{
+            formHelperText: {
+              error: !!errors.password,
+            },
+          }}
+          helperText={<ErrorField formProp="password" />}
+          {...register('password')}
         />
         <TextField
           margin="normal"
@@ -63,10 +138,20 @@ export const Register: React.FC = () => {
           fullWidth
           label="Confirm Password"
           type="password"
-          value={confirmPassword}
-          onChange={e => setConfirmPassword(e.target.value)}
+          slotProps={{
+            formHelperText: {
+              error: !!errors.confirmPassword,
+            },
+          }}
+          helperText={<ErrorField formProp="confirmPassword" />}
+          {...register('confirmPassword')}
         />
-        {error && <Typography color="error">{error}</Typography>}
+        <FormHelperText
+          error={!!formErrorMessage}
+          sx={{ width: '100%', fontSize: '1.2rem' }}
+        >
+          {formErrorMessage}
+        </FormHelperText>
         <Button
           type="submit"
           fullWidth

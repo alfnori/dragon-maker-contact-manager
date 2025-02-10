@@ -5,53 +5,55 @@ import Logo from '../components/Common/Logo';
 
 export const AuthenticateLayout: React.FC = () => {
   return (
-    <Container>
+    <Container
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        height: '100vh',
+      }}
+    >
       <Grid2
+        size={{ xs: 10, sm: 8, md: 6 }}
         sx={{
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          height: '100vh',
+          justifyContent: 'center',
         }}
-        size={12}
       >
-        <Grid2
-          size={{ xs: 10, sm: 8, md: 6 }}
+        <Card
           sx={{
+            marginTop: 8,
+            padding: 4,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            justifyContent: 'center',
+            boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
+            minWidth: '600px',
+            maxWidth: '600px',
           }}
+          variant="outlined"
         >
-          <Card
+          <Logo />
+          <Typography variant="h5" component="h1" gutterBottom>
+            Contact Manager
+          </Typography>
+          <Typography variant="body2" gutterBottom>
+            An easy-to-use contact manager made by cute dragons!
+          </Typography>
+          <Box
             sx={{
-              marginTop: 8,
-              padding: 8,
+              marginTop: 4,
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
-              maxWidth: '600px',
+              justifyContent: 'center',
             }}
-            variant="outlined"
           >
-            <Logo />
-            <Typography variant="h5" component="h1" gutterBottom>
-              Contact Manager
-            </Typography>
-            <Typography variant="body2" gutterBottom>
-              An easy-to-use contact manager made by cute dragons!
-            </Typography>
-            <Box
-              sx={{
-                marginTop: 4,
-              }}
-            >
-              <Outlet />
-            </Box>
-          </Card>
-        </Grid2>
+            <Outlet />
+          </Box>
+        </Card>
       </Grid2>
     </Container>
   );

@@ -63,9 +63,6 @@ const themeOptions: ThemeOptions = {
       },
     },
     MuiContainer: {
-      defaultProps: {
-        maxWidth: 'lg',
-      },
       styleOverrides: {
         root: {
           display: 'inline-grid',

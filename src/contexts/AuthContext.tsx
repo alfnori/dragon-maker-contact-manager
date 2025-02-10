@@ -13,7 +13,7 @@ import { AuthContext } from './useAuth';
 export interface AuthContextType {
   user: User | null;
   login: (email: string, password: string) => boolean;
-  register: (email: string, password: string) => boolean;
+  signUp: (name: string, email: string, password: string) => boolean;
   logout: () => void;
   deleteAccount: (password: string) => boolean;
 }
@@ -38,7 +38,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     return true;
   };
 
-  const register = (email: string, password: string): boolean => {
+  const signUp = (name: string, email: string, password: string): boolean => {
     const users = getFromLocalStorage('users') || [];
     const existingUser = users.find((u: User) => u.email === email);
 
@@ -49,6 +49,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
     const newUser: User = {
       id: uuid(),
+      name,
       email,
       password: undefined,
       contacts: [],
@@ -86,7 +87,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
   return (
     <AuthContext.Provider
-      value={{ user, login, register, logout, deleteAccount }}
+      value={{ user, login, signUp, logout, deleteAccount }}
     >
       {children}
     </AuthContext.Provider>
