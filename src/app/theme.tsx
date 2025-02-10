@@ -10,6 +10,13 @@ const themeOptions: ThemeOptions = {
       main: '#db404b',
     },
   },
+  typography: {
+    h1: {
+      color: 'Primary.main',
+      alignSelf: 'center',
+      fontWeight: 'bold',
+    },
+  },
   spacing: 8,
   breakpoints: {
     keys: ['xs', 'sm', 'md', 'lg', 'xl'],
@@ -49,6 +56,25 @@ const themeOptions: ThemeOptions = {
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
+        },
+        body: {
+          background: 'none',
+        },
+      },
+    },
+    MuiContainer: {
+      defaultProps: {
+        maxWidth: 'lg',
+      },
+      styleOverrides: {
+        root: {
+          display: 'inline-grid',
+          '&::-webkit-scrollbar': {
+            display: 'none',
+          },
+          scrollbarWidth: 'none',
+          msOverflowStyle: 'none',
+          backgroundColor: 'Background',
         },
       },
     },

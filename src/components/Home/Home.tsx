@@ -62,16 +62,10 @@ export const Home: React.FC = () => {
 
   return (
     <Container
-      maxWidth="lg"
       sx={{
-        display: 'inline-grid',
+        background: 'none',
         maxHeight: '100vh',
         overflow: 'auto',
-        '&::-webkit-scrollbar': {
-          display: 'none',
-        },
-        scrollbarWidth: 'none',
-        msOverflowStyle: 'none',
       }}
     >
       <Box sx={{ m: 4, mb: 4, display: 'flex', flexDirection: 'column' }}>
@@ -92,9 +86,9 @@ export const Home: React.FC = () => {
                 ml: 2,
               }}
             >
-              <Logo size={120} link="/contacts" />
+              <Logo link="/contacts" />
               <Link
-                variant="h2"
+                variant="h1"
                 component="a"
                 underline="hover"
                 align="center"
@@ -102,11 +96,9 @@ export const Home: React.FC = () => {
                 gutterBottom
                 href="/contacts"
                 sx={{
-                  color: theme.palette.primary.main,
-                  alignSelf: 'center',
-                  fontWeight: 'bold',
                   mb: 0,
                   fontSize: { xs: '2rem', sm: '3rem' },
+                  alignSelf: 'center',
                 }}
               >
                 The Tale of the Dragon Maker

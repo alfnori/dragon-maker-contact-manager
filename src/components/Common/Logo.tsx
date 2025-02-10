@@ -3,11 +3,11 @@ import { Avatar, IconButton } from '@mui/material';
 import { useNavigate } from 'react-router';
 
 interface LogoProps {
-  size?: number;
+  size?: number | 'sm' | 'md' | 'lg';
   link?: string;
 }
 
-export const Logo: React.FC<LogoProps> = ({ size = 84, link = '/' }) => {
+export const Logo: React.FC<LogoProps> = ({ size = 'lg', link = '/' }) => {
   const dragonRoar = keyframes`
   0% {
     transform: scale(0.9);
@@ -32,14 +32,29 @@ export const Logo: React.FC<LogoProps> = ({ size = 84, link = '/' }) => {
 
   const navigate = useNavigate();
 
+  const parseSize = (size: number | 'sm' | 'md' | 'lg') => {
+    switch (size) {
+      case 'sm':
+        return 48;
+      case 'md':
+        return 64;
+      case 'lg':
+        return 84;
+      default:
+        return size;
+    }
+  };
+
+  const parsedSize = parseSize(size);
+
   return (
     <IconButton onClick={() => navigate(link)}>
       <Avatar
         alt="Dragon Maker"
         src="/dragon-maker.png"
         sx={{
-          width: size,
-          height: size,
+          width: parsedSize,
+          height: parsedSize,
           ':hover': {
             cursor: 'pointer',
             animation: `${dragonRoar} 1.5s ease-out infinite`,

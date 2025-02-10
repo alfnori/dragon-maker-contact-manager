@@ -6,7 +6,7 @@ import { Login } from '../components/Auth/Login';
 import { Register } from '../components/Auth/Register';
 import { AuthProvider } from '../contexts/AuthContext';
 import { AuthenticateLayout } from '../layouts/AuthenticateLayout';
-import { PrivateRoute } from '../router/PrivateRoute';
+import { PrivateRoute, ProtectedRoute } from '../router/PrivateRoute';
 import { Error } from '../components/Error/Error';
 import { Home } from '../components/Home/Home';
 
@@ -18,8 +18,18 @@ const App: React.FC = () => {
           <Route path="/" element={<Home />} />
 
           <Route element={<AuthenticateLayout />}>
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
+            <Route
+              path="/login"
+              element={
+                <ProtectedRoute element={<Login />} redirectTo="/contacts" />
+              }
+            />
+            <Route
+              path="/register"
+              element={
+                <ProtectedRoute element={<Register />} redirectTo="/contacts" />
+              }
+            />
           </Route>
 
           <Route
