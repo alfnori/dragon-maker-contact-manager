@@ -30,7 +30,6 @@ export const AuthenticateLayout: React.FC = () => {
             flexDirection: 'column',
             alignItems: 'center',
             boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
-            minWidth: '600px',
             maxWidth: '600px',
           }}
           variant="outlined"

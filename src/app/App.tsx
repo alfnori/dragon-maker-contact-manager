@@ -9,6 +9,7 @@ import { AuthenticateLayout } from '../layouts/AuthenticateLayout';
 import { PrivateRoute, ProtectedRoute } from '../router/PrivateRoute';
 import { Error } from '../components/Error/Error';
 import { Home } from '../components/Home/Home';
+import { ContactList } from '../components/Contacts/ContactList';
 
 const App: React.FC = () => {
   return (
@@ -34,7 +35,7 @@ const App: React.FC = () => {
 
           <Route
             path="/contacts"
-            element={<PrivateRoute element={<div>Contact List</div>} />}
+            element={<PrivateRoute element={<ContactList />} />}
           />
 
           <Route path="*" element={<Error />} />
