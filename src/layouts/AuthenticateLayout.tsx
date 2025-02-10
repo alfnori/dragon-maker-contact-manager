@@ -49,6 +49,7 @@ export const AuthenticateLayout: React.FC = () => {
               flexDirection: 'column',
               alignItems: 'center',
               justifyContent: 'center',
+              width: '100%',
             }}
           >
             <Outlet />

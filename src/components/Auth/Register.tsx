@@ -38,17 +38,12 @@ export const Register: React.FC = () => {
     data: RegisterFormState,
     errors: FormErrors<RegisterFormState>
   ) => {
-    console.log('formData', data);
-    console.log('errors', errors);
-
     if (Object.entries(errors).length) {
       return false;
     }
 
     const { name, email, password } = data;
     const success = signUp(name, email, password);
-
-    console.log(name, email, password, success);
 
     if (success) {
       navigate('/contacts');
