@@ -12,7 +12,8 @@
     "prettier": "npx prettier . --check",
     "prettier:fix": "npm run prettier -- --write",
     "prepare": "husky",
-    "lint-staged": "lint-staged"
+    "lint-staged": "lint-staged",
+    "test": ""
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",

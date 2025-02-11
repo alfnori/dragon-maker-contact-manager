@@ -56,7 +56,7 @@ export const ContactList: React.FC = () => {
   };
 
   return (
-    <Container sx={{ width: '90vw', minHeight: '100vh' }}>
+    <Container sx={{ width: '75vw', minHeight: '100vh' }}>
       <MiniDrawer />
       <Grid2>
         <Typography variant="h4" sx={{ my: 2 }}>

@@ -75,6 +75,20 @@ const themeOptions: ThemeOptions = {
         },
       },
     },
+    MuiDialog: {
+      styleOverrides: {
+        root: {
+          maxWidth: '100vw',
+        },
+      },
+    },
+    MuiDrawer: {
+      styleOverrides: {
+        anchorLeft: {
+          background: 'none',
+        },
+      },
+    },
   },
 };
 
