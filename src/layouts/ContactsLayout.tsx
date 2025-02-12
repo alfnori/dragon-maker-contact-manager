@@ -14,19 +14,20 @@ import Logo from '../components/Common/Logo';
 import { useAuth } from '../contexts/useAuth';
 
 import {
+  Container,
   ListItem,
   ListItemButton,
   ListItemIcon,
   ListItemText,
 } from '@mui/material';
 import { useState } from 'react';
-import { ContactMap } from '../components/Maps/ContactMap';
+import { Outlet } from 'react-router';
 import { DeleteMenuItem } from './components/DeleteMenuItem';
 import { AppBar, Drawer, DrawerHeader } from './components/DrawerAppBar';
 import { LogoutMenuItem } from './components/LogoutMenuItem';
 import { SearchBar } from './components/SearchBar';
 
-export default function MiniDrawer() {
+export default function ContactLayout() {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -134,10 +135,18 @@ export default function MiniDrawer() {
           <LogoutMenuItem parentOpen={open} />
         </List>
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-        <DrawerHeader />
-        <Typography sx={{ marginBottom: 2 }}>Google Maps Here!</Typography>
-        <ContactMap contacts={user?.contacts || []} />
+      <Box component="main" sx={{ flexGrow: 1, py: 3, minHeight: '100vh' }}>
+        <Toolbar />
+        <Container
+          sx={theme => {
+            return {
+              width: '75vw',
+              minHeight: `calc(100vh - ${+theme.mixins.toolbar.minHeight! * 2}px)`,
+            };
+          }}
+        >
+          <Outlet />
+        </Container>
       </Box>
     </Box>
   );

@@ -10,6 +10,7 @@ import { PrivateRoute, ProtectedRoute } from '../router/PrivateRoute';
 import { Error } from '../components/Error/Error';
 import { Home } from '../components/Home/Home';
 import { ContactList } from '../components/Contacts/ContactList';
+import ContactLayout from '../layouts/ContactsLayout';
 
 const App: React.FC = () => {
   return (
@@ -33,10 +34,9 @@ const App: React.FC = () => {
             />
           </Route>
 
-          <Route
-            path="/contacts"
-            element={<PrivateRoute element={<ContactList />} />}
-          />
+          <Route path="/contacts" element={<ContactLayout />}>
+            <Route index element={<PrivateRoute element={<ContactList />} />} />
+          </Route>
 
           <Route path="*" element={<Error />} />
         </Routes>

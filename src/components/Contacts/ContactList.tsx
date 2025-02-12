@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from 'react';
 import {
+  Button,
+  Container,
+  Divider,
+  Grid2,
   List,
   ListItem,
   ListItemText,
-  Button,
-  Grid2,
   TextField,
   Typography,
-  Container,
-  Divider,
 } from '@mui/material';
-import { ContactForm } from './ContactForm';
-import { ContactService } from '../../services/contactService';
+import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../contexts/useAuth';
+import { ContactService } from '../../services/contactService';
 import { Contact } from '../../types/Contact';
-import MiniDrawer from '../../layouts/ContactsLayout';
+import { ContactMap } from '../Maps/ContactMap';
+import { ContactForm } from './ContactForm';
 
 export const ContactList: React.FC = () => {
   const [contacts, setContacts] = useState<Contact[]>([]);
@@ -56,8 +56,11 @@ export const ContactList: React.FC = () => {
   };
 
   return (
-    <Container sx={{ width: '75vw', minHeight: '100vh' }}>
-      <MiniDrawer />
+    <Grid2 container spacing={2}>
+      <Grid2>
+        <Typography sx={{ marginBottom: 2 }}>Google Maps Here!</Typography>
+        <ContactMap contacts={user?.contacts || []} />
+      </Grid2>
       <Grid2>
         <Typography variant="h4" sx={{ my: 2 }}>
           Contacts
@@ -104,6 +107,6 @@ export const ContactList: React.FC = () => {
           />
         )}
       </Grid2>
-    </Container>
+    </Grid2>
   );
 };
