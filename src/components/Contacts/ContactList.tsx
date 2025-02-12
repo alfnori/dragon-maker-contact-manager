@@ -1,16 +1,14 @@
 import {
   Button,
-  Container,
   Divider,
   Grid2,
   List,
   ListItem,
   ListItemText,
-  TextField,
   Typography,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { useAuth } from '../../contexts/useAuth';
+import { useAuth } from '../../contexts/auth/useAuth';
 import { ContactService } from '../../services/contactService';
 import { Contact } from '../../types/Contact';
 import { ContactMap } from '../Maps/ContactMap';
@@ -23,7 +21,8 @@ export const ContactList: React.FC = () => {
   const [selectedContact, setSelectedContact] = useState<Contact | undefined>(
     undefined
   );
-  const [searchTerm, setSearchTerm] = useState('');
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [searchTerm, _setSearchTerm] = useState('');
   const { user } = useAuth();
 
   useEffect(() => {
@@ -65,13 +64,6 @@ export const ContactList: React.FC = () => {
         <Typography variant="h4" sx={{ my: 2 }}>
           Contacts
         </Typography>
-        <TextField
-          fullWidth
-          label="Search Contacts"
-          value={searchTerm}
-          onChange={e => setSearchTerm(e.target.value)}
-          sx={{ mb: 2 }}
-        />
         <Button
           variant="contained"
           onClick={() => setOpenForm(true)}

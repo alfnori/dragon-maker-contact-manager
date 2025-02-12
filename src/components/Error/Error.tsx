@@ -1,5 +1,5 @@
 import {
-  Box,
+  Button,
   Container,
   Fade,
   Grid2,
@@ -7,13 +7,12 @@ import {
   Paper,
   Typography,
   useTheme,
-  Button,
 } from '@mui/material';
 import React from 'react';
 import Logo from '../Common/Logo';
 
-import SmartToyIcon from '@mui/icons-material/SmartToy';
 import ForwardIcon from '@mui/icons-material/Forward';
+import SmartToyIcon from '@mui/icons-material/SmartToy';
 
 export const Error: React.FC = () => {
   const theme = useTheme();

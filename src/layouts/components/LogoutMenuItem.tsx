@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
-import { useAuth } from '../../contexts/useAuth';
+import { useAuth } from '../../contexts/auth/useAuth';
 
 export const LogoutMenuItem = ({ parentOpen }: { parentOpen?: boolean }) => {
   const { logout } = useAuth();

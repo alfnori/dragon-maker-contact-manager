@@ -9,7 +9,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 import * as Yup from 'yup';
 import useForm, { FormErrors } from '../../hooks/useForm';
-import { useAuth } from '../../contexts/useAuth';
+import { useAuth } from '../../contexts/auth/useAuth';
 
 interface LoginFormState {
   email: string;
@@ -36,7 +36,7 @@ export const Login: React.FC = () => {
     }
 
     const { email, password } = data;
-    const success = login(email, password);
+    const success = await login(email, password);
 
     if (success) {
       navigate('/contacts');

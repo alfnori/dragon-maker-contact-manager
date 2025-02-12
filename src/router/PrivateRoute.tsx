@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Navigate } from 'react-router';
-import { useAuth } from '../contexts/useAuth';
+import { useAuth } from '../contexts/auth/useAuth';
 
 interface PrivateRouteProps {
   element: React.ReactNode;
@@ -11,7 +11,16 @@ export const PrivateRoute: React.FC<PrivateRouteProps> = ({
   element,
   redirectTo = '/login',
 }) => {
-  const { user } = useAuth();
+  const { user, checkUser } = useAuth();
+
+  useEffect(() => {
+    const validateUser = async () => {
+      await checkUser();
+    };
+
+    validateUser();
+  }, [checkUser, user]);
+
   return user && user.id ? <>{element}</> : <Navigate to={redirectTo} />;
 };
 
@@ -19,6 +28,15 @@ export const ProtectedRoute: React.FC<PrivateRouteProps> = ({
   element,
   redirectTo = '/',
 }) => {
-  const { user } = useAuth();
+  const { user, checkUser } = useAuth();
+
+  useEffect(() => {
+    const validateUser = async () => {
+      await checkUser();
+    };
+
+    validateUser();
+  }, [checkUser, user]);
+
   return user && user.id ? <Navigate to={redirectTo} /> : <>{element}</>;
 };

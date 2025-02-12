@@ -33,7 +33,7 @@ export const SearchBar = ({ onSearchToggle }: SearchBarPros) => {
 
   const filterOptions = createFilterOptions({
     matchFrom: 'start',
-    stringify: (option: any) => option.title,
+    stringify: (option: unknown) => option.title,
   });
 
   useEffect(() => {

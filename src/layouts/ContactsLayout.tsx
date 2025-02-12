@@ -11,7 +11,7 @@ import { useTheme } from '@mui/material/styles';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Logo from '../components/Common/Logo';
-import { useAuth } from '../contexts/useAuth';
+import { useAuth } from '../contexts/auth/useAuth';
 
 import {
   Container,
@@ -29,6 +29,8 @@ import { SearchBar } from './components/SearchBar';
 
 export default function ContactLayout() {
   const theme = useTheme();
+  const { user } = useAuth();
+
   const [open, setOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
 
@@ -40,9 +42,7 @@ export default function ContactLayout() {
     setOpen(false);
   };
 
-  const { user } = useAuth();
   const handleSearchToggle = (searchOpen: boolean) => {
-    console.log('searchOpen', searchOpen);
     if (searchOpen) {
       handleDrawerClose();
     }

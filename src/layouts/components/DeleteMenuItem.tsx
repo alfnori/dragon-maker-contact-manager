@@ -18,7 +18,7 @@ import {
 } from '@mui/material';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
-import { useAuth } from '../../contexts/useAuth';
+import { useAuth } from '../../contexts/auth/useAuth';
 
 export const DeleteMenuItem = ({ parentOpen }: { parentOpen?: boolean }) => {
   const { deleteAccount } = useAuth();
@@ -37,12 +37,8 @@ export const DeleteMenuItem = ({ parentOpen }: { parentOpen?: boolean }) => {
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    const formJson = Object.fromEntries(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (formData as any).entries()
-    );
-    const password = formJson.password;
-    console.log(password);
+    const formJson = Object.fromEntries(formData.entries());
+    const password = `${formJson.password}`;
 
     if (password) {
       handleToggle();

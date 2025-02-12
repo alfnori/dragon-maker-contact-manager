@@ -17,11 +17,28 @@ import {
   Typography,
   useTheme,
 } from '@mui/material';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Logo from '../Common/Logo';
+import { useAuth } from '../../contexts/auth/useAuth';
 
 export const Home: React.FC = () => {
   const theme = useTheme();
+
+  const { user, checkUser } = useAuth();
+  const [loggedUser, setLoggedUser] = useState(!!user?.id);
+
+  useEffect(() => {
+    const validateUser = async () => {
+      if (loggedUser || user?.id) return;
+
+      const currentUser = await checkUser();
+      if (currentUser && !loggedUser) {
+        setLoggedUser(true);
+      }
+    };
+
+    validateUser();
+  }, [checkUser, loggedUser, user]);
 
   const MyPaper = (props: { children: React.ReactNode }) => (
     <Paper
@@ -239,7 +256,7 @@ export const Home: React.FC = () => {
 
             <Button
               variant="contained"
-              href="/contacts"
+              href={loggedUser ? '/contacts' : '/login'}
               size="large"
               sx={{
                 color: theme.palette.secondary.contrastText,

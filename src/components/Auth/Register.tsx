@@ -9,7 +9,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 import * as Yup from 'yup';
 import useForm, { FormErrors } from '../../hooks/useForm';
-import { useAuth } from '../../contexts/useAuth';
+import { useAuth } from '../../contexts/auth/useAuth';
 
 interface RegisterFormState {
   name: string;
@@ -43,7 +43,7 @@ export const Register: React.FC = () => {
     }
 
     const { name, email, password } = data;
-    const success = signUp(name, email, password);
+    const success = await signUp(name, email, password);
 
     if (success) {
       navigate('/contacts');

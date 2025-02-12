@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import { Contact } from '../../types/Contact';
 import { ContactService } from '../../services/contactService';
-import { useAuth } from '../../contexts/useAuth';
+import { useAuth } from '../../contexts/auth/useAuth';
 import { getAddressByCEP } from '../../services/apiService';
 import { validateCPF } from '../../utils/validation';
 
@@ -28,6 +28,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({
     initialContact || {
       id: '',
       name: '',
+      userId: '',
       cpf: '',
       phone: '',
       address: {

@@ -1,4 +1,4 @@
-import { Box, Card, Container, Grid2, Typography } from '@mui/material';
+import { Card, Container, Grid2, Typography } from '@mui/material';
 import React from 'react';
 import { Outlet } from 'react-router';
 import Logo from '../components/Common/Logo';
