@@ -33,7 +33,8 @@ export interface StorageEntityRepository {
 }
 
 export const StorageRepository = (): StorageEntityRepository => {
-  const appStorage = import.meta.env.VITE_APP_STORAGE_TYPE || '';
+  const appStorage =
+    import.meta.env.VITE_APP_STORAGE_TYPE || StorageType.LOCAL_STORAGE;
 
   switch (appStorage) {
     case StorageType.LOCAL_STORAGE:
