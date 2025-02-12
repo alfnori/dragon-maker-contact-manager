@@ -5,6 +5,7 @@ import themeOptions from './app/theme';
 
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { BrowserRouter } from 'react-router';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -15,8 +16,10 @@ const theme = createTheme(themeOptions);
 root.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <App />
+      <BrowserRouter>
+        <CssBaseline />
+        <App />
+      </BrowserRouter>
     </ThemeProvider>
   </React.StrictMode>
 );
