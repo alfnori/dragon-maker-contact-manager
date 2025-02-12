@@ -33,7 +33,8 @@ export const SearchBar = ({ onSearchToggle }: SearchBarPros) => {
 
   const filterOptions = createFilterOptions({
     matchFrom: 'start',
-    stringify: (option: unknown) => option.title,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    stringify: (option: any) => option.title,
   });
 
   useEffect(() => {
@@ -60,7 +61,8 @@ export const SearchBar = ({ onSearchToggle }: SearchBarPros) => {
       <Autocomplete
         id="search-contacts"
         freeSolo
-        getOptionLabel={option => option.title}
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        getOptionLabel={(option: any) => option.title}
         options={[
           { key: 'abc', title: 'abc' },
           { key: 'asaad', title: 'aaabbbccc' },
