@@ -213,6 +213,11 @@ export const Home: React.FC = () => {
               alignContent: 'center',
               justifyContent: 'center',
               mb: 2,
+              [theme.breakpoints.down('sm')]: {
+                mt: 2,
+                flexDirection: 'column',
+                gap: 1,
+              },
             }}
           >
             <Typography
@@ -222,7 +227,15 @@ export const Home: React.FC = () => {
               Are you ready?
             </Typography>
 
-            <ForwardIcon fontSize="large" sx={{ mx: 1 }} />
+            <ForwardIcon
+              fontSize="large"
+              sx={{
+                mx: 1,
+                [theme.breakpoints.down('sm')]: {
+                  transform: 'rotate(90deg)',
+                },
+              }}
+            />
 
             <Button
               variant="contained"

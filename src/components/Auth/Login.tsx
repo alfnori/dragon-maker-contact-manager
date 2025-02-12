@@ -73,7 +73,7 @@ export const Login: React.FC = () => {
   const formErrorMessage = errors['__main'] || formError;
 
   return (
-    <Box sx={{ width: '100%', padding: 0 }}>
+    <Box sx={{ width: '100%' }}>
       <Typography component="h1" variant="h5">
         Sign In
       </Typography>
