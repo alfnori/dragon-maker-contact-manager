@@ -22,7 +22,7 @@ const removeFromLocalStorage = (key: string) => {
 };
 
 export const initiateStorage = () => {
-  const appInitialized = localStorage.getItem(EntitiesManager.APP);
+  const appInitialized = localStorage.getItem(EntitiesManager.APP) || undefined;
 
   if (appInitialized) return;
 

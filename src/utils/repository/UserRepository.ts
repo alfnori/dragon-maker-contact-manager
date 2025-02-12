@@ -18,6 +18,10 @@ export interface IUsersRepository {
 export const UsersRepository = (
   storageRepository: StorageEntityRepository
 ): IUsersRepository => {
+  const connect = async () => {
+    await storageRepository.connect();
+  };
+
   const userList = async (filterFn?: EntityFilterFn<User>) => {
     return await storageRepository.searchEntity<User>(
       EntitiesManager.USER_LIST,
@@ -29,12 +33,14 @@ export const UsersRepository = (
 
   return {
     currentUser: async () => {
+      await connect();
       return await storageRepository.getEntity<User>(
         EntitiesManager.CURRENT_USER
       );
     },
 
     setCurrentUser: async (user: User | undefined) => {
+      await connect();
       if (!user) {
         return await storageRepository.removeEntity(
           EntitiesManager.CURRENT_USER
@@ -48,10 +54,13 @@ export const UsersRepository = (
     },
 
     getAll: async () => {
+      await connect();
       return await userList();
     },
 
     findByID: async (id: string) => {
+      await connect();
+
       const findId = (user: Partial<User>) => user.id === id;
       const users = await userList(findId);
 
@@ -59,12 +68,16 @@ export const UsersRepository = (
     },
 
     search: async (filter: EntityFilterFn<User>) => {
+      await connect();
+
       const users = await userList(filter);
 
       return users || [];
     },
 
     save: async (user: User) => {
+      await connect();
+
       const uniqueFn = (existingUser: Partial<User>) => {
         const sameEmail = existingUser.email === user.email;
         const sameId = existingUser.id === user.id;
@@ -90,6 +103,8 @@ export const UsersRepository = (
     },
 
     delete: async (id: string) => {
+      await connect();
+
       const findId = (user: Partial<User>) => user.id === id;
       const existingUser = await userList(findId);
 
