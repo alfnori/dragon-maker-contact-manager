@@ -5,9 +5,16 @@ import bcrypt from 'bcryptjs';
 import { v4 as uuid } from 'uuid';
 import { useInjection } from '../injection/useInjection';
 import { AuthContext } from './useAuth';
+import {
+  AppLocalStorageKeys,
+  getFromLocalStorage,
+  removeFromLocalStorage,
+  saveToLocalStorage,
+} from '../../utils/storages/localStorage';
 
 export interface AuthContextType {
   user: User | null;
+  sessionUser: () => User | undefined;
   checkUser: () => Promise<User | undefined>;
   login: (email: string, password: string) => Promise<boolean>;
   signUp: (name: string, email: string, password: string) => Promise<boolean>;
@@ -20,6 +27,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const { usersRepository } = useInjection();
 
+  const sessionUser = () => {
+    const sessionUser = getFromLocalStorage(AppLocalStorageKeys.SESSION);
+    if (!sessionUser) return undefined;
+
+    return sessionUser as User;
+  };
+
   async function fetchCurrentUser() {
     const currentUser = await usersRepository.currentUser();
     return currentUser || null;
@@ -31,7 +45,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     currentUser = use(fetchCurrentUser());
   }
 
-  const [user, setUser] = useState<User | null>(currentUser);
+  const [user, setUser] = useState<User | null>(sessionUser() || currentUser);
 
   const checkUser = async (): Promise<User | undefined> => {
     const currentUser = await fetchCurrentUser();
@@ -57,6 +71,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     }
 
     setUser(foundUser);
+    saveToLocalStorage(AppLocalStorageKeys.SESSION, foundUser);
     return await usersRepository.setCurrentUser(foundUser);
   };
 
@@ -90,6 +105,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
   const logout = async () => {
     setUser(null);
+    removeFromLocalStorage(AppLocalStorageKeys.SESSION);
     return await usersRepository.setCurrentUser(undefined);
   };
 
@@ -113,7 +129,15 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
   return (
     <AuthContext.Provider
-      value={{ user, checkUser, login, signUp, logout, deleteAccount }}
+      value={{
+        user,
+        sessionUser,
+        checkUser,
+        login,
+        signUp,
+        logout,
+        deleteAccount,
+      }}
     >
       {children}
     </AuthContext.Provider>

@@ -11,11 +11,11 @@ export enum AppLocalStorageKeys {
   SESSION = 'dragon-maker-session',
 }
 
-const saveToLocalStorage = (key: string, value: unknown) => {
+export const saveToLocalStorage = (key: string, value: unknown) => {
   localStorage.setItem(key, JSON.stringify(value));
 };
 
-const getFromLocalStorage = (key: string) => {
+export const getFromLocalStorage = (key: string) => {
   try {
     const item = localStorage.getItem(key);
     return item ? JSON.parse(item) : null;
@@ -24,7 +24,7 @@ const getFromLocalStorage = (key: string) => {
   }
 };
 
-const removeFromLocalStorage = (key: string) => {
+export const removeFromLocalStorage = (key: string) => {
   localStorage.removeItem(key);
 };
 
