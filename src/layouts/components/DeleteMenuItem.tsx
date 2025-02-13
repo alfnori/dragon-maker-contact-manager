@@ -1,5 +1,4 @@
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
-import { useTheme } from '@mui/material/styles';
 
 import {
   Alert,
@@ -9,20 +8,16 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
   Snackbar,
   TextField,
 } from '@mui/material';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useAuth } from '../../contexts/auth/useAuth';
+import { ListMenuItem } from './ListMenuItem';
 
-export const DeleteMenuItem = ({ parentOpen }: { parentOpen?: boolean }) => {
+export const DeleteMenuItem = ({ parentOpen }: { parentOpen: boolean }) => {
   const { deleteAccount } = useAuth();
-  const theme = useTheme();
 
   const navigate = useNavigate();
 
@@ -54,27 +49,13 @@ export const DeleteMenuItem = ({ parentOpen }: { parentOpen?: boolean }) => {
   };
 
   return (
-    <ListItem
-      key={'logout-menu'}
-      disablePadding
-      title="Delete account"
-      sx={{ display: 'block' }}
+    <ListMenuItem
+      parentOpen={parentOpen}
+      title={'Delete account'}
+      onClick={handleToggle}
+      MenuIcon={<PersonRemoveIcon />}
     >
-      <ListItemButton
-        onClick={() => handleToggle()}
-        sx={[
-          {
-            minHeight: 48,
-          },
-          parentOpen
-            ? {
-                justifyContent: 'initial',
-              }
-            : {
-                justifyContent: 'center',
-              },
-        ]}
-      >
+      <>
         <Snackbar open={!!passwordToast} autoHideDuration={5000}>
           <Alert severity="error" variant="filled" sx={{ width: '100%' }}>
             {passwordToast}
@@ -134,41 +115,7 @@ export const DeleteMenuItem = ({ parentOpen }: { parentOpen?: boolean }) => {
             </Button>
           </DialogActions>
         </Dialog>
-        <ListItemIcon
-          sx={[
-            {
-              minWidth: 0,
-              justifyContent: 'center',
-              color: theme.palette.secondary.main,
-            },
-            parentOpen
-              ? {
-                  mr: 3,
-                }
-              : {
-                  mr: 'auto',
-                },
-          ]}
-        >
-          <PersonRemoveIcon />
-        </ListItemIcon>
-        <ListItemText
-          primary={'Delete account'}
-          sx={[
-            {
-              color: theme.palette.secondary.main,
-              fontWeight: 'bold',
-            },
-            parentOpen
-              ? {
-                  opacity: 1,
-                }
-              : {
-                  opacity: 0,
-                },
-          ]}
-        />
-      </ListItemButton>
-    </ListItem>
+      </>
+    </ListMenuItem>
   );
 };

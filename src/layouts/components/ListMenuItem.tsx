@@ -1,47 +1,36 @@
-import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
-import { useTheme } from '@mui/material/styles';
-
 import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
   ListItem,
   ListItemButton,
   ListItemIcon,
   ListItemText,
 } from '@mui/material';
-import { useState } from 'react';
-import { useNavigate } from 'react-router';
-import { useAuth } from '../../contexts/auth/useAuth';
+import { ReactNode } from 'react';
 
-export const ListMenuItem = ({ parentOpen }: { parentOpen?: boolean }) => {
-  const { logout } = useAuth();
-  const theme = useTheme();
-
-  const navigate = useNavigate();
-
-  const [open, setOpen] = useState(false);
-
-  const handleToggle = () => {
-    setOpen(!open);
-  };
-
+export const ListMenuItem = ({
+  title,
+  onClick,
+  MenuIcon,
+  children,
+  parentOpen,
+}: {
+  title: string;
+  parentOpen: boolean;
+  onClick: () => void;
+  MenuIcon: ReactNode;
+  children?: ReactNode;
+}) => {
   return (
     <ListItem
-      key={'logout-menu'}
+      key={`list-item-${title}`}
       disablePadding
-      title="Delete account"
+      title={title}
       sx={{ display: 'block' }}
     >
       <ListItemButton
-        onClick={handleToggle}
+        onClick={onClick}
         sx={[
           {
             minHeight: 48,
-            px: 2.5,
           },
           parentOpen
             ? {
@@ -52,44 +41,11 @@ export const ListMenuItem = ({ parentOpen }: { parentOpen?: boolean }) => {
               },
         ]}
       >
-        <Dialog
-          open={open}
-          onClose={handleToggle}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-        >
-          <DialogTitle id="alert-dialog-title">{'Delete account?'}</DialogTitle>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              Are you sure you want to delete this account? Deleting the account
-              not only will remove your access, but you will lose all of ours
-              contacts. Do you want to proceed?
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button variant="outlined" onClick={handleToggle}>
-              Cancel
-            </Button>
-            <Button
-              variant="contained"
-              color="error"
-              onClick={async () => {
-                await logout();
-                handleToggle();
-                navigate('/');
-              }}
-              autoFocus
-            >
-              Delete account
-            </Button>
-          </DialogActions>
-        </Dialog>
         <ListItemIcon
           sx={[
             {
               minWidth: 0,
               justifyContent: 'center',
-              color: theme.palette.secondary.main,
             },
             parentOpen
               ? {
@@ -100,13 +56,12 @@ export const ListMenuItem = ({ parentOpen }: { parentOpen?: boolean }) => {
                 },
           ]}
         >
-          <PersonRemoveIcon />
+          {MenuIcon}
         </ListItemIcon>
         <ListItemText
-          primary={'Delete account'}
+          primary={title}
           sx={[
             {
-              color: theme.palette.secondary.main,
               fontWeight: 'bold',
             },
             parentOpen
@@ -118,6 +73,8 @@ export const ListMenuItem = ({ parentOpen }: { parentOpen?: boolean }) => {
                 },
           ]}
         />
+
+        {children}
       </ListItemButton>
     </ListItem>
   );

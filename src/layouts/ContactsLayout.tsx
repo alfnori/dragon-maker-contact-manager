@@ -13,39 +13,37 @@ import Typography from '@mui/material/Typography';
 import Logo from '../components/Common/Logo';
 import { useAuth } from '../contexts/auth/useAuth';
 
-import {
-  Container,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-} from '@mui/material';
+import ContactsIcon from '@mui/icons-material/Contacts';
+
+import { Container } from '@mui/material';
 import { useState } from 'react';
-import { Outlet } from 'react-router';
+import { Outlet, useNavigate } from 'react-router';
 import { DeleteMenuItem } from './components/DeleteMenuItem';
 import { AppBar, Drawer, DrawerHeader } from './components/DrawerAppBar';
+import { ListMenuItem } from './components/ListMenuItem';
 import { LogoutMenuItem } from './components/LogoutMenuItem';
 import { SearchBar } from './components/SearchBar';
 
 export default function ContactLayout() {
   const theme = useTheme();
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   const [open, setOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
 
   const handleDrawerOpen = () => {
+    setSearchOpen(false);
     setOpen(true);
   };
 
   const handleDrawerClose = () => {
+    if (searchOpen) setSearchOpen(false);
     setOpen(false);
   };
 
   const handleSearchToggle = (searchOpen: boolean) => {
-    if (searchOpen) {
-      handleDrawerClose();
-    }
+    if (searchOpen) handleDrawerClose();
     setSearchOpen(searchOpen);
   };
 
@@ -84,7 +82,7 @@ export default function ContactLayout() {
                 {
                   fontSize: { xs: '1rem', sm: '1.5rem' },
                   [theme.breakpoints.down('sm')]: [
-                    searchOpen && {
+                    (searchOpen || open) && {
                       visibility: 'hidden',
                     },
                   ],
@@ -94,7 +92,7 @@ export default function ContactLayout() {
               Dragon Maker Contact Manager
             </Typography>
           </Box>
-          <SearchBar onSearchToggle={handleSearchToggle} />
+          <SearchBar onSearchToggle={handleSearchToggle} parentOpen={open} />
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>
@@ -106,6 +104,10 @@ export default function ContactLayout() {
               width: '100%',
               overflow: 'hidden',
               whiteSpace: 'nowrap',
+              ':hover': {
+                overflow: 'visible',
+                whiteSpace: 'normal',
+              },
             }}
           >
             Welcome {user?.name}!
@@ -120,14 +122,21 @@ export default function ContactLayout() {
         </DrawerHeader>
         <Divider />
         <List>
-          <ListItem key={'Contact List'} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                <AllInboxIcon />
-              </ListItemIcon>
-              <ListItemText primary={'Contact List'} />
-            </ListItemButton>
-          </ListItem>
+          <ListMenuItem
+            parentOpen={open}
+            onClick={() => navigate('/contacts/add')}
+            title={'Add Contact'}
+            MenuIcon={<ContactsIcon />}
+          />
+        </List>
+        <Divider />
+        <List>
+          <ListMenuItem
+            parentOpen={open}
+            onClick={() => navigate('/contacts')}
+            title={'List all Contacts'}
+            MenuIcon={<AllInboxIcon />}
+          />
         </List>
         <Divider />
         <List>
@@ -139,9 +148,31 @@ export default function ContactLayout() {
         <Toolbar />
         <Container
           sx={theme => {
+            const openProps = open
+              ? {
+                  [theme.breakpoints.down('sm')]: [
+                    {
+                      width: '50vw',
+                    },
+                  ],
+                  [theme.breakpoints.down('xs')]: [
+                    {
+                      display: 'none',
+                    },
+                  ],
+                }
+              : {
+                  [theme.breakpoints.down('xs')]: [
+                    {
+                      width: '100vw',
+                    },
+                  ],
+                };
             return {
               width: '75vw',
+              display: 'inline-flex',
               minHeight: `calc(100vh - ${+theme.mixins.toolbar.minHeight! * 2}px)`,
+              ...openProps,
             };
           }}
         >

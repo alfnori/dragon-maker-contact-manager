@@ -5,7 +5,7 @@ import {
   IconButton,
   TextField,
 } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import { styled, useTheme } from '@mui/material/styles';
 import { useCallback, useEffect, useState } from 'react';
 
 const Search = styled('div')(({ theme }) => ({
@@ -19,16 +19,26 @@ const Search = styled('div')(({ theme }) => ({
 
 export interface SearchBarPros {
   onSearchToggle?: (open: boolean) => void;
+  parentOpen?: boolean;
 }
 
-export const SearchBar = ({ onSearchToggle }: SearchBarPros) => {
+export const SearchBar = ({ onSearchToggle, parentOpen }: SearchBarPros) => {
   const [open, setOpen] = useState(false);
   const [searchItem, setSearchItem] = useState('');
 
+  const theme = useTheme();
+
+  useEffect(() => {
+    if (parentOpen) {
+      setSearchItem('');
+      setOpen(false);
+    }
+  }, [parentOpen]);
+
   const toggleOpen = useCallback(() => {
+    if (onSearchToggle) onSearchToggle(!open);
     setOpen(!open);
     setSearchItem('');
-    if (onSearchToggle) onSearchToggle(!open);
   }, [onSearchToggle, open]);
 
   const filterOptions = createFilterOptions({
@@ -48,7 +58,15 @@ export const SearchBar = ({ onSearchToggle }: SearchBarPros) => {
   }, [open, searchItem, toggleOpen]);
 
   return (
-    <Search>
+    <Search
+      sx={{
+        [theme.breakpoints.down(390)]: [
+          parentOpen && {
+            visibility: 'hidden',
+          },
+        ],
+      }}
+    >
       <IconButton
         color="inherit"
         aria-label="open search"
