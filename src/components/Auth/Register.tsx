@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router';
 import * as Yup from 'yup';
 import useForm, { FormErrors } from '../../hooks/useForm';
 import { useAuth } from '../../contexts/auth/useAuth';
+import { ErrorField } from '../../utils/forms';
 
 interface RegisterFormState {
   name: string;
@@ -67,18 +68,6 @@ export const Register: React.FC = () => {
     validationSchema
   );
 
-  const ErrorField = ({
-    formProp,
-  }: {
-    formProp: keyof FormErrors<RegisterFormState>;
-  }) => {
-    return (
-      <FormHelperText error={!!errors[formProp]} sx={{ width: '100%' }}>
-        {errors[formProp]}
-      </FormHelperText>
-    );
-  };
-
   const formErrorMessage = errors['__main'] || formError;
 
   return (
@@ -97,7 +86,7 @@ export const Register: React.FC = () => {
               error: !!errors.name,
             },
           }}
-          helperText={<ErrorField formProp="name" />}
+          helperText={<ErrorField formProp="name" errors={errors} />}
           {...register('name')}
         />
         <TextField
@@ -110,7 +99,7 @@ export const Register: React.FC = () => {
               error: !!errors.email,
             },
           }}
-          helperText={<ErrorField formProp="email" />}
+          helperText={<ErrorField formProp="email" errors={errors} />}
           {...register('email')}
         />
         <TextField
@@ -124,7 +113,7 @@ export const Register: React.FC = () => {
               error: !!errors.password,
             },
           }}
-          helperText={<ErrorField formProp="password" />}
+          helperText={<ErrorField formProp="password" errors={errors} />}
           {...register('password')}
         />
         <TextField
@@ -138,7 +127,7 @@ export const Register: React.FC = () => {
               error: !!errors.confirmPassword,
             },
           }}
-          helperText={<ErrorField formProp="confirmPassword" />}
+          helperText={<ErrorField formProp="confirmPassword" errors={errors} />}
           {...register('confirmPassword')}
         />
         <FormHelperText

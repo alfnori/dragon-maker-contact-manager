@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router';
 import * as Yup from 'yup';
 import useForm, { FormErrors } from '../../hooks/useForm';
 import { useAuth } from '../../contexts/auth/useAuth';
+import { ErrorField } from '../../utils/forms';
 
 interface LoginFormState {
   email: string;
@@ -39,6 +40,7 @@ export const Login: React.FC = () => {
     const success = await login(email, password);
 
     if (success) {
+      localStorage.setItem('');
       navigate('/contacts');
     } else {
       setFormError('Invalid credentials');
@@ -58,18 +60,6 @@ export const Login: React.FC = () => {
     validationSchema
   );
 
-  const ErrorField = ({
-    formProp,
-  }: {
-    formProp: keyof FormErrors<LoginFormState>;
-  }) => {
-    return (
-      <FormHelperText error={!!errors[formProp]} sx={{ width: '100%' }}>
-        {errors[formProp]}
-      </FormHelperText>
-    );
-  };
-
   const formErrorMessage = errors['__main'] || formError;
 
   return (
@@ -88,7 +78,7 @@ export const Login: React.FC = () => {
               error: !!errors.email,
             },
           }}
-          helperText={<ErrorField formProp="email" />}
+          helperText={<ErrorField formProp="email" errors={errors} />}
           {...register('email')}
         />
         <TextField
@@ -102,7 +92,7 @@ export const Login: React.FC = () => {
               error: !!errors.password,
             },
           }}
-          helperText={<ErrorField formProp="password" />}
+          helperText={<ErrorField formProp="password" errors={errors} />}
           {...register('password')}
         />
         <FormHelperText
