@@ -3,7 +3,6 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import MenuIcon from '@mui/icons-material/Menu';
 import Box from '@mui/material/Box';
-import CssBaseline from '@mui/material/CssBaseline';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
@@ -49,8 +48,7 @@ export default function ContactLayout() {
 
   return (
     <Box sx={{ display: 'flex' }}>
-      <CssBaseline />
-      <AppBar position="absolute" open={open}>
+      <AppBar position="fixed" open={open}>
         <Toolbar sx={{ justifyContent: 'space-between' }}>
           <Box
             sx={{
@@ -144,36 +142,13 @@ export default function ContactLayout() {
           <LogoutMenuItem parentOpen={open} />
         </List>
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, py: 3, minHeight: '100vh' }}>
-        <Toolbar />
+      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+        <DrawerHeader />
         <Container
-          sx={theme => {
-            const openProps = open
-              ? {
-                  [theme.breakpoints.down('sm')]: [
-                    {
-                      width: '50vw',
-                    },
-                  ],
-                  [theme.breakpoints.down('xs')]: [
-                    {
-                      display: 'none',
-                    },
-                  ],
-                }
-              : {
-                  [theme.breakpoints.down('xs')]: [
-                    {
-                      width: '100vw',
-                    },
-                  ],
-                };
-            return {
-              width: '75vw',
-              display: 'inline-flex',
-              minHeight: `calc(100vh - ${+theme.mixins.toolbar.minHeight! * 2}px)`,
-              ...openProps,
-            };
+          sx={{
+            width: '75vw',
+            display: 'inline-flex',
+            minHeight: `calc(100vh - ${+theme.mixins.toolbar.minHeight! * 2}px)`,
           }}
         >
           <Outlet />
