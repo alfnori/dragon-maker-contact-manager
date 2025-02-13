@@ -7,11 +7,11 @@ export enum StorageType {
 }
 
 export enum EntitiesManager {
-  APP = 'dragon-maker-app',
+  STORAGE = 'dragon-maker-storage',
   USER_LIST = 'dragon-maker-user-list',
   CONTACT_LIST = `dragon-maker-contact-list`,
-  CURRENT_USER = 'dragon-maker-user',
-  CURRENT_CONTACT = 'dragon-maker-contact',
+  USER = 'dragon-maker-user',
+  CONTACT = 'dragon-maker-contact',
 }
 
 export type EntityFilterFn<T> = (terms: Partial<T>) => boolean;

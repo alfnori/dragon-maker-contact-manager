@@ -34,21 +34,17 @@ export const UsersRepository = (
   return {
     currentUser: async () => {
       await connect();
-      return await storageRepository.getEntity<User>(
-        EntitiesManager.CURRENT_USER
-      );
+      return await storageRepository.getEntity<User>(EntitiesManager.USER);
     },
 
     setCurrentUser: async (user: User | undefined) => {
       await connect();
       if (!user) {
-        return await storageRepository.removeEntity(
-          EntitiesManager.CURRENT_USER
-        );
+        return await storageRepository.removeEntity(EntitiesManager.USER);
       }
 
       return await storageRepository.storeEntity<User>(
-        EntitiesManager.CURRENT_USER,
+        EntitiesManager.USER,
         user as User
       );
     },

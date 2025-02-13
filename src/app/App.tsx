@@ -5,6 +5,7 @@ import { Route, Routes } from 'react-router';
 import { Login } from '../components/Auth/Login';
 import { Register } from '../components/Auth/Register';
 import { ContactList } from '../components/Contacts/ContactList';
+import { ContactAdd } from '../components/Contacts/ContactAdd';
 import { Error } from '../components/Error/Error';
 import { Home } from '../components/Home/Home';
 import { AuthProvider } from '../contexts/auth/AuthContext';
@@ -13,8 +14,11 @@ import { InjectionProvider } from '../contexts/injection/InjectionContext';
 import { AuthenticateLayout } from '../layouts/AuthenticateLayout';
 import ContactLayout from '../layouts/ContactsLayout';
 import { PrivateRoute, ProtectedRoute } from '../router/PrivateRoute';
+import { initiateAppLocalStorage } from '../utils/storages/localStorage';
 
 const App: React.FC = () => {
+  initiateAppLocalStorage();
+
   return (
     <InjectionProvider>
       <AuthProvider>
@@ -41,6 +45,7 @@ const App: React.FC = () => {
               }
             >
               <Route index element={<ContactList />} />
+              <Route path="/contacts/add" element={<ContactAdd />} />
             </Route>
 
             <Route path="*" element={<Error />} />

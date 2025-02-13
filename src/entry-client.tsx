@@ -6,12 +6,15 @@ import themeOptions from './app/theme';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { BrowserRouter } from 'react-router';
+import { initiateAppLocalStorage } from './utils/storages/localStorage';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 
 const theme = createTheme(themeOptions);
+
+initiateAppLocalStorage();
 
 root.render(
   <React.StrictMode>

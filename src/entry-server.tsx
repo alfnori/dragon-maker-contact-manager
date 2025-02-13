@@ -1,10 +1,10 @@
-import React, { Suspense } from 'react';
-import App from './app/App';
-import themeOptions from './app/theme';
-import ReactDOMServer from 'react-dom/server';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
+import React, { Suspense } from 'react';
+import ReactDOMServer from 'react-dom/server';
 import { StaticRouter } from 'react-router';
+import App from './app/App';
+import themeOptions from './app/theme';
 
 const theme = createTheme(themeOptions);
 

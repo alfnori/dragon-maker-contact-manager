@@ -4,6 +4,13 @@ import {
   StorageEntityRepository,
 } from '../storage';
 
+import { v4 as uuid } from 'uuid';
+
+export enum AppLocalStorageKeys {
+  APP = 'dragon-maker-app',
+  SESSION = 'dragon-maker-session',
+}
+
 const saveToLocalStorage = (key: string, value: unknown) => {
   localStorage.setItem(key, JSON.stringify(value));
 };
@@ -21,14 +28,27 @@ const removeFromLocalStorage = (key: string) => {
   localStorage.removeItem(key);
 };
 
+export const initiateAppLocalStorage = () => {
+  if (typeof window === 'undefined') return;
+
+  const initialized =
+    localStorage.getItem(AppLocalStorageKeys.APP) || undefined;
+
+  if (initialized) return;
+
+  localStorage.setItem(AppLocalStorageKeys.APP, new Date().toISOString());
+  localStorage.setItem(AppLocalStorageKeys.SESSION, '');
+};
+
 export const initiateStorage = () => {
-  const appInitialized = localStorage.getItem(EntitiesManager.APP) || undefined;
+  const initialized =
+    localStorage.getItem(EntitiesManager.STORAGE) || undefined;
 
-  if (appInitialized) return;
+  if (initialized) return;
 
-  localStorage.setItem(EntitiesManager.APP, new Date().toISOString());
-  localStorage.setItem(EntitiesManager.CURRENT_USER, '{}');
-  localStorage.setItem(EntitiesManager.CURRENT_CONTACT, '{}');
+  localStorage.setItem(EntitiesManager.STORAGE, uuid());
+  localStorage.setItem(EntitiesManager.USER, '{}');
+  localStorage.setItem(EntitiesManager.CONTACT, '{}');
   localStorage.setItem(EntitiesManager.CONTACT_LIST, '[]');
   localStorage.setItem(EntitiesManager.USER_LIST, '[]');
 };
