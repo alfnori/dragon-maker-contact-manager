@@ -22,29 +22,25 @@ const App: React.FC = () => {
           <Routes>
             <Route path="/" element={<Home />} />
 
-            <Route element={<AuthenticateLayout />}>
-              <Route
-                path="/login"
-                element={
-                  <ProtectedRoute element={<Login />} redirectTo="/contacts" />
-                }
-              />
-              <Route
-                path="/register"
-                element={
-                  <ProtectedRoute
-                    element={<Register />}
-                    redirectTo="/contacts"
-                  />
-                }
-              />
+            <Route
+              element={
+                <ProtectedRoute
+                  element={<AuthenticateLayout />}
+                  redirectTo="/contacts"
+                />
+              }
+            >
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
             </Route>
 
-            <Route path="/contacts" element={<ContactLayout />}>
-              <Route
-                index
-                element={<PrivateRoute element={<ContactList />} />}
-              />
+            <Route
+              path="/contacts"
+              element={
+                <PrivateRoute element={<ContactLayout />} redirectTo="/login" />
+              }
+            >
+              <Route index element={<ContactList />} />
             </Route>
 
             <Route path="*" element={<Error />} />

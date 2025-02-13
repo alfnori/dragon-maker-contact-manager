@@ -9,8 +9,6 @@ interface ContactMapProps {
 export const ContactMap: React.FC<ContactMapProps> = () => {
   const API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || '';
 
-  console.log({ API_KEY });
-
   return (
     <APIProvider apiKey={API_KEY}>
       <Map

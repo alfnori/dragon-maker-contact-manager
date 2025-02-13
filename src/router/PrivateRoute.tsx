@@ -14,6 +14,8 @@ export const PrivateRoute: React.FC<PrivateRouteProps> = ({
   const { user, checkUser } = useAuth();
 
   useEffect(() => {
+    if (user?.id) return;
+
     const validateUser = async () => {
       await checkUser();
     };
@@ -31,6 +33,8 @@ export const ProtectedRoute: React.FC<PrivateRouteProps> = ({
   const { user, checkUser } = useAuth();
 
   useEffect(() => {
+    if (user?.id) return;
+
     const validateUser = async () => {
       await checkUser();
     };

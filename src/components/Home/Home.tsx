@@ -32,9 +32,8 @@ export const Home: React.FC = () => {
       if (loggedUser || user?.id) return;
 
       const currentUser = await checkUser();
-      if (currentUser && !loggedUser) {
-        setLoggedUser(true);
-      }
+
+      setLoggedUser(!!currentUser?.id);
     };
 
     validateUser();
