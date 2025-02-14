@@ -9,10 +9,10 @@ import {
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../contexts/auth/useAuth';
-import { ContactService } from '../../services/contactService';
 import { Contact } from '../../types/Contact';
 import { ContactMap } from '../Maps/ContactMap';
-import { ContactForm } from './ContactForm';
+import { useContactService } from '../../services/contactService';
+import { useNavigate } from 'react-router';
 
 export const ContactList: React.FC = () => {
   const [contacts, setContacts] = useState<Contact[]>([]);
@@ -24,14 +24,19 @@ export const ContactList: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [searchTerm, _setSearchTerm] = useState('');
   const { user } = useAuth();
+  const navigate = useNavigate();
+
+  const { getContacts, deleteContact } = useContactService();
 
   useEffect(() => {
-    if (user) {
-      const userContacts = ContactService.getContacts(user.id!);
+    const fetchContacts = async () => {
+      const userContacts = await getContacts(`${user?.id}`);
+      console.log(userContacts);
       setContacts(userContacts);
-      setFilteredContacts(userContacts);
-    }
-  }, [user]);
+      // setFilteredContacts(userContacts);
+    };
+    fetchContacts();
+  }, []);
 
   useEffect(() => {
     const filtered = contacts.filter(
@@ -42,9 +47,9 @@ export const ContactList: React.FC = () => {
     setFilteredContacts(filtered);
   }, [searchTerm, contacts]);
 
-  const handleDelete = (contactId: string) => {
+  const handleDelete = async (contactId: string) => {
     if (user) {
-      ContactService.deleteContact(user.id!, contactId);
+      await deleteContact(contactId);
       setContacts(prev => prev.filter(c => c.id !== contactId));
     }
   };
@@ -66,7 +71,7 @@ export const ContactList: React.FC = () => {
         </Typography>
         <Button
           variant="contained"
-          onClick={() => setOpenForm(true)}
+          onClick={() => navigate('/contacts/add')}
           sx={{ mb: 2, mr: 2 }}
         >
           Add Contact
