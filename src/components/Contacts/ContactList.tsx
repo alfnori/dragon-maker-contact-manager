@@ -13,16 +13,19 @@ import { Contact } from '../../types/Contact';
 import { ContactMap } from '../Maps/ContactMap';
 import { useContactService } from '../../services/contactService';
 import { useNavigate } from 'react-router';
+import { DeleteContactConfirm } from './components/deleteConfirm';
 
 export const ContactList: React.FC = () => {
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [filteredContacts, setFilteredContacts] = useState<Contact[]>([]);
-  const [openForm, setOpenForm] = useState(false);
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [searchTerm, _setSearchTerm] = useState('');
+
   const [selectedContact, setSelectedContact] = useState<Contact | undefined>(
     undefined
   );
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [searchTerm, _setSearchTerm] = useState('');
+
   const { user } = useAuth();
   const navigate = useNavigate();
 
@@ -31,7 +34,6 @@ export const ContactList: React.FC = () => {
   useEffect(() => {
     const fetchContacts = async () => {
       const userContacts = await getContacts(`${user?.id}`);
-      console.log(userContacts);
       setContacts(userContacts);
       // setFilteredContacts(userContacts);
     };
@@ -52,11 +54,6 @@ export const ContactList: React.FC = () => {
       await deleteContact(contactId);
       setContacts(prev => prev.filter(c => c.id !== contactId));
     }
-  };
-
-  const handleEdit = (contact: Contact) => {
-    setSelectedContact(contact);
-    setOpenForm(true);
   };
 
   return (
@@ -84,25 +81,22 @@ export const ContactList: React.FC = () => {
                 primary={contact.name}
                 secondary={`CPF: ${contact.cpf} | Phone: ${contact.phone}`}
               />
-              <Button onClick={() => handleEdit(contact)}>Edit</Button>
-              <Button color="error" onClick={() => handleDelete(contact.id)}>
+              <Button color="error" onClick={() => setSelectedContact(contact)}>
                 Delete
               </Button>
+              <DeleteContactConfirm
+                open={!!selectedContact?.id}
+                contact={selectedContact}
+                handleClose={(confirm: boolean) => {
+                  if (confirm) {
+                    handleDelete(`${selectedContact?.id}`);
+                  }
+                  setSelectedContact(undefined);
+                }}
+              />
             </ListItem>
           ))}
         </List>
-        {openForm && (
-          <ContactForm
-            open={openForm}
-            onClose={() => {
-              setOpenForm(false);
-              setSelectedContact(undefined);
-              const userContacts = ContactService.getContacts(user!.id!);
-              setContacts(userContacts);
-            }}
-            initialContact={selectedContact}
-          />
-        )}
       </Grid2>
     </Grid2>
   );
