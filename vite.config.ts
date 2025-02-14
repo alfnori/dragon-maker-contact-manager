@@ -5,12 +5,12 @@ import react from '@vitejs/plugin-react-swc';
 export default defineConfig({
   plugins: [react()],
   base: '/',
-  build: {
-    ssr: true,
-    rollupOptions: {
-      input: './src/entry-server.tsx',
-    },
-  },
+  // build: {
+  //   ssr: true,
+  //   rollupOptions: {
+  //     input: './src/entry-server.tsx',
+  //   },
+  // },
   ssr: {
     noExternal: ['@mui/*', '@emotion/*'],
     optimizeDeps: {
