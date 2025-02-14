@@ -53,11 +53,11 @@ export const Login: React.FC = () => {
     password: '',
   };
 
-  const { errors, register, formSubmit } = useForm<LoginFormState>(
+  const { errors, register, formSubmit } = useForm<LoginFormState>({
     handleSubmit,
     initialState,
-    validationSchema
-  );
+    validationSchema,
+  });
 
   const formErrorMessage = errors['__main'] || formError;
 

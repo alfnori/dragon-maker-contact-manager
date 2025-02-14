@@ -62,11 +62,11 @@ export const Register: React.FC = () => {
     confirmPassword: '',
   };
 
-  const { errors, register, formSubmit } = useForm<RegisterFormState>(
+  const { errors, register, formSubmit } = useForm<RegisterFormState>({
     handleSubmit,
     initialState,
-    validationSchema
-  );
+    validationSchema,
+  });
 
   const formErrorMessage = errors['__main'] || formError;
 

@@ -6,14 +6,7 @@ import {
 } from 'react';
 import { ObjectSchema, ValidationError } from 'yup';
 
-// type Dispatchx<A> = (value: A) => DispatchWithoutAction;
-// type Dispatch<SetStateAction<S>>;
-
 export type FormErrors<T> = Record<keyof T, string> & { __main?: string };
-
-// export type StateAction<T> = React.SetStateAction<Awaited<T>>;
-
-// export type StateSetter<T> = (state: SetStateAction<T>) => void;
 
 export type Dispatch<T = unknown> = ReactDispatch<SetStateAction<T>>;
 
@@ -70,7 +63,8 @@ export interface UseFormProps<T extends Record<string, unknown>> {
   handleFormErrorState?: HandleFieldState<FormErrors<T>>;
 }
 
-function useForm<T extends Record<string, unknown>>({
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function useForm<T extends Record<string, any>>({
   handleSubmit,
   validationSchema,
   onFieldChange,
@@ -204,7 +198,7 @@ function useForm<T extends Record<string, unknown>>({
     name: name as string,
     onChange: handleChange,
     onBlur: handleBlur,
-    value: `${formData[name]}`,
+    value: `${formData[name] || ''}`,
     error: Boolean(errors[name as string]),
     helperText: errors[name as string],
   });
