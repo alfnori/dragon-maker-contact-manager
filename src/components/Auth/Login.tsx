@@ -40,7 +40,6 @@ export const Login: React.FC = () => {
     const success = await login(email, password);
 
     if (success) {
-      localStorage.setItem('');
       navigate('/contacts');
     } else {
       setFormError('Invalid credentials');

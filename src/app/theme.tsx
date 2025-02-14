@@ -56,6 +56,7 @@ const themeOptions: ThemeOptions = {
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
+          backgroundAttachment: 'fixed',
         },
         body: {
           background: 'none',

@@ -1,21 +1,43 @@
-import { useState } from 'react';
+import {
+  Dispatch as ReactDispatch,
+  SetStateAction,
+  useEffect,
+  useState,
+} from 'react';
 import { ObjectSchema, ValidationError } from 'yup';
+
+// type Dispatchx<A> = (value: A) => DispatchWithoutAction;
+// type Dispatch<SetStateAction<S>>;
 
 export type FormErrors<T> = Record<keyof T, string> & { __main?: string };
 
+// export type StateAction<T> = React.SetStateAction<Awaited<T>>;
+
+// export type StateSetter<T> = (state: SetStateAction<T>) => void;
+
+export type Dispatch<T = unknown> = ReactDispatch<SetStateAction<T>>;
+
+export type FormTouches<T> = Record<keyof T, boolean>;
+
+export type FormFieldRegister<T> = (name: keyof T) => {
+  name: string;
+  id: string;
+  value: string;
+  error?: boolean;
+  helperText?: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onBlur: (e: React.FocusEvent<HTMLInputElement>) => void;
+};
 export interface FormProps<T> {
-  formData: T;
   submitCount: number;
   formSubmit: (event: React.FormEvent) => void;
-  touched: Record<keyof T, boolean>;
+  touched: FormTouches<T>;
+  formData: T;
+  setFormData: Dispatch<T>;
   errors: FormErrors<T>;
-  register: (name: keyof T) => {
-    name: keyof T;
-    id: string;
-    value: string;
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    onBlur: (e: React.FocusEvent<HTMLInputElement>) => void;
-  };
+  setErrors: Dispatch<FormErrors<T>>;
+  setTouched: Dispatch<FormTouches<T>>;
+  register: FormFieldRegister<T>;
 }
 
 export type HandleSubmit<T> = (
@@ -24,18 +46,71 @@ export type HandleSubmit<T> = (
   previousState?: T
 ) => Promise<T | boolean>;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function useForm<T extends Record<string, any>>(
-  handleSubmit: HandleSubmit<T>,
-  initialState: Awaited<T>,
-  validationSchema?: ObjectSchema<T>
-): FormProps<T> {
+export type HandleField<T> = Partial<{
+  [key in keyof T]: (
+    state: Partial<T> | undefined,
+    touches: Record<keyof T, boolean>,
+    setFormData?: Dispatch<T>,
+    setErrors?: Dispatch<FormErrors<T>>,
+    setTouched?: Dispatch<FormTouches<T>>
+  ) => void;
+}>;
+
+export type HandleFieldState<T> = {
+  dataItem: T;
+  setDataItem: Dispatch<T>;
+};
+
+export interface UseFormProps<T extends Record<string, unknown>> {
+  handleSubmit: HandleSubmit<T>;
+  validationSchema?: ObjectSchema<T>;
+  onFieldChange?: HandleField<T>;
+  onFieldBlur?: HandleField<T>;
+  handleFormState?: HandleFieldState<T>;
+  handleFormErrorState?: HandleFieldState<FormErrors<T>>;
+}
+
+function useForm<T extends Record<string, unknown>>({
+  handleSubmit,
+  validationSchema,
+  onFieldChange,
+  onFieldBlur,
+  handleFormState,
+  handleFormErrorState,
+}: UseFormProps<T>): FormProps<T> {
   const [submitCount, setSubmitCount] = useState(0);
   const [touched, setTouched] = useState<Record<keyof T, boolean>>(
     {} as Record<keyof T, boolean>
   );
-  const [formData, setFormData] = useState(initialState);
-  const [errors, setErrors] = useState<FormErrors<T>>({} as FormErrors<T>);
+
+  const [formData, setUseFormData] = useState(
+    (handleFormState?.dataItem || {}) as T
+  );
+  const [errors, setUseErrors] = useState(
+    (handleFormErrorState?.dataItem || {}) as FormErrors<T>
+  );
+
+  const setFormData = (state: SetStateAction<T>) => {
+    setUseFormData(state);
+    handleFormState?.setDataItem(state);
+  };
+
+  const setErrors = (state: SetStateAction<FormErrors<T>>) => {
+    setUseErrors(state);
+    handleFormErrorState?.setDataItem(state);
+  };
+
+  useEffect(() => {
+    if (!handleFormState) return;
+
+    setUseFormData(handleFormState?.dataItem);
+  }, [handleFormState, handleFormState?.dataItem]);
+
+  useEffect(() => {
+    if (!handleFormErrorState) return;
+
+    setUseErrors(handleFormErrorState?.dataItem);
+  }, [handleFormErrorState, handleFormErrorState?.dataItem]);
 
   const validate = async (data: T) => {
     let errors = {};
@@ -60,7 +135,17 @@ function useForm<T extends Record<string, any>>(
     }));
   };
 
-  async function onSubmit(state: Awaited<T>) {
+  const customSetFormData = (state: SetStateAction<T>) => {
+    setFormData(state);
+
+    const touchedEntries = Object.keys(state).map(key => [key, true]);
+    if (!touchedEntries.length) return;
+
+    const touchedObject = Object.fromEntries(touchedEntries);
+    setTouched(prev => ({ ...prev, ...touchedObject }));
+  };
+
+  async function onSubmit(state: T) {
     try {
       const fieldValues = (await state) as T;
 
@@ -79,7 +164,14 @@ function useForm<T extends Record<string, any>>(
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    validateElement(name, value);
+    customSetFormData(prev => ({ ...prev, [name]: value }));
+
+    if (!onFieldChange) return;
+
+    if (onFieldChange[name]) {
+      onFieldChange[name](formData, touched, customSetFormData);
+    }
   };
 
   const validateElement = (name: keyof T, value: unknown) => {
@@ -99,16 +191,22 @@ function useForm<T extends Record<string, any>>(
     const { name, value } = event.target;
     validateElement(name, value);
     setTouched(prev => ({ ...prev, [name]: true }));
+
+    if (!onFieldBlur) return;
+
+    if (onFieldBlur[name]) {
+      onFieldBlur[name](formData, touched, customSetFormData);
+    }
   };
 
-  const register = (name: keyof T) => ({
+  const register: FormFieldRegister<T> = (name: keyof T) => ({
     id: name as string,
-    name,
+    name: name as string,
     onChange: handleChange,
     onBlur: handleBlur,
-    value: formData[name],
-    error: Boolean(errors[name as string] && touched[name as string]),
-    helperText: touched[name as string] ? errors[name as string] : undefined,
+    value: `${formData[name]}`,
+    error: Boolean(errors[name as string]),
+    helperText: errors[name as string],
   });
 
   const formSubmit = async (event: React.FormEvent) => {
@@ -128,9 +226,12 @@ function useForm<T extends Record<string, any>>(
     submitCount,
     touched,
     errors,
-    formData,
     formSubmit,
     register,
+    formData,
+    setFormData,
+    setErrors,
+    setTouched,
   };
 }
 

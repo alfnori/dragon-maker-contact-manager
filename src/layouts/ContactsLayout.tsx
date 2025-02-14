@@ -14,7 +14,7 @@ import { useAuth } from '../contexts/auth/useAuth';
 
 import ContactsIcon from '@mui/icons-material/Contacts';
 
-import { Container } from '@mui/material';
+import { Container, Grid2 } from '@mui/material';
 import { useState } from 'react';
 import { Outlet, useNavigate } from 'react-router';
 import { DeleteMenuItem } from './components/DeleteMenuItem';
@@ -145,13 +145,30 @@ export default function ContactLayout() {
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
         <Container
+          maxWidth={false}
           sx={{
-            width: '75vw',
+            background: 'none',
+            position: 'absolute',
+            top: `calc(${theme.mixins.toolbar.minHeight}px + ${theme.spacing(3)})`,
+            left: `calc(${theme.spacing(2)} + ${open ? '320px' : '64px'})`,
             display: 'inline-flex',
-            minHeight: `calc(100vh - ${+theme.mixins.toolbar.minHeight! * 2}px)`,
+            alignContent: 'center',
+            justifyContent: 'center',
+            maxWidth: `calc(100vw - 64px - ${theme.spacing(5)})`,
+            minHeight: `calc(100vh - ${+theme.mixins.toolbar.minHeight! * 2}px + ${theme.spacing(1)})`,
           }}
         >
-          <Outlet />
+          <Grid2
+            sx={{
+              width: '600px',
+              padding: 3,
+              maxWidth: `calc(90vw - 64px)`,
+              background: theme.palette.background.default,
+              borderRadius: 1,
+            }}
+          >
+            <Outlet />
+          </Grid2>
         </Container>
       </Box>
     </Box>

@@ -11,7 +11,7 @@ export interface Contact {
     city: string;
     state: string;
     complement?: string;
-    latitude: number;
-    longitude: number;
+    latitude?: number;
+    longitude?: number;
   };
 }
