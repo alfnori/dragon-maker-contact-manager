@@ -55,6 +55,7 @@ export type HandleFieldState<T> = {
 };
 
 export interface UseFormProps<T extends Record<string, unknown>> {
+  initialState?: T;
   handleSubmit: HandleSubmit<T>;
   validationSchema?: ObjectSchema<T>;
   onFieldChange?: HandleField<T>;
@@ -65,6 +66,7 @@ export interface UseFormProps<T extends Record<string, unknown>> {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function useForm<T extends Record<string, any>>({
+  initialState,
   handleSubmit,
   validationSchema,
   onFieldChange,
@@ -78,7 +80,7 @@ function useForm<T extends Record<string, any>>({
   );
 
   const [formData, setUseFormData] = useState(
-    (handleFormState?.dataItem || {}) as T
+    (handleFormState?.dataItem || initialState || {}) as T
   );
   const [errors, setUseErrors] = useState(
     (handleFormErrorState?.dataItem || {}) as FormErrors<T>

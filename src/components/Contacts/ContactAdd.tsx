@@ -1,17 +1,14 @@
 import { Box, Button, FormHelperText, Typography } from '@mui/material';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
 import * as Yup from 'yup';
+import { useAuth } from '../../contexts/auth/useAuth';
 import useForm, { FormErrors } from '../../hooks/useForm';
 import { CepAddress, getAddressByCEP } from '../../services/apiService';
+import { useContactService } from '../../services/contactService';
 import { Contact } from '../../types/Contact';
 import { FormElement, FormFieldInputProps } from '../../utils/forms';
-import { useAuth } from '../../contexts/auth/useAuth';
 import { validateCPF } from '../../utils/validation';
-import {
-  ContactService,
-  useContactService,
-} from '../../services/contactService';
 
 type ContactAddForm = Omit<Contact, 'id' | 'userId' | 'address'> &
   Contact['address'];
@@ -248,7 +245,7 @@ export const ContactAdd: React.FC = () => {
                 label={field.charAt(0).toUpperCase() + field.slice(1)}
                 register={register}
                 errors={errors}
-                value={formData[field as keyof ContactAddForm]}
+                value={`${formData[field as keyof ContactAddForm]}`}
                 inputProps={additionalFieldProps[field as keyof ContactAddForm]}
               />
             );

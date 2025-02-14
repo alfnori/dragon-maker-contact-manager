@@ -6,7 +6,7 @@ import {
 } from '@mui/material';
 import { FormErrors, FormProps } from '../hooks/useForm';
 
-export type FormState = Record<keyof T, string> & { __main?: string };
+export type FormState<T> = Record<keyof T, string> & { __main?: string };
 
 export type FormFieldInputProps<T> = {
   [K in keyof T]?: TextFieldProps;
