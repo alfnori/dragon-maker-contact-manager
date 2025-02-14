@@ -7,6 +7,11 @@ import { CepAddress, getAddressByCEP } from '../../services/apiService';
 import { Contact } from '../../types/Contact';
 import { FormElement, FormFieldInputProps } from '../../utils/forms';
 import { useAuth } from '../../contexts/auth/useAuth';
+import { validateCPF } from '../../utils/validation';
+import {
+  ContactService,
+  useContactService,
+} from '../../services/contactService';
 
 type ContactAddForm = Omit<Contact, 'id' | 'userId' | 'address'> &
   Contact['address'];
@@ -16,12 +21,12 @@ export const ContactAdd: React.FC = () => {
   const { user } = useAuth();
 
   const cepRegex = /^(\d{5})-?(\d{3})$/;
+  const cpfRegex = /^\d{3}\.?\d{3}\.?\d{3}-?\d{2}$/;
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().min(3, 'Too short').required('Required'),
-    cpf: Yup.string()
-      .matches(/^\d{3}\.?\d{3}\.?\d{3}-?\d{2}$/, 'CPF Invalid')
-      .required('Required'),
+    cpf: Yup.string().matches(cpfRegex, 'CPF Invalid').required('Required'),
+    email: Yup.string().email('Invalid email').required('Required'),
     phone: Yup.string()
       .matches(
         /^(?:\(?([1-9]{2})\)?\s?)?(?:(9\s?\d{4})(-|\s?)?(\d{4})|(\d{4})(-|\s?)?(\d{4}))$/,
@@ -44,8 +49,9 @@ export const ContactAdd: React.FC = () => {
     return {
       name: '',
       cpf: '',
+      email: '',
       phone: '',
-      cep: '80610010',
+      cep: '',
       street: '',
       number: '',
       city: '',
@@ -59,6 +65,8 @@ export const ContactAdd: React.FC = () => {
   const [formData, setFormData] = useState(initialState);
   const [errors, setErrors] = useState({} as FormErrors<ContactAddForm>);
 
+  const { addContact } = useContactService();
+
   const handleSubmit = async (
     data: ContactAddForm,
     errors: FormErrors<ContactAddForm>
@@ -70,15 +78,23 @@ export const ContactAdd: React.FC = () => {
       return false;
     }
 
-    return false;
+    const { name, email, cpf, phone, ...address } = formData;
 
-    // const { email, password } = data;
-    const success = true; // await ContactService.addContact(user?.id, contact);
+    const success = await addContact(user!.id!, {
+      name,
+      email,
+      cpf,
+      phone,
+      address,
+    });
 
     if (success) {
       navigate('/contacts');
     } else {
-      setFormError('Invalid contact information');
+      setErrors(prev => ({
+        ...prev,
+        __main: 'Failed to save contact',
+      }));
     }
 
     return data;
@@ -114,6 +130,14 @@ export const ContactAdd: React.FC = () => {
       ddd: '',
     },
   });
+
+  const handleCPFValidate = (cpf: string) => {
+    const cpfError = validateCPF(cpf) ? '' : 'CPF invalid';
+    setErrors(prev => ({
+      ...prev,
+      cpf: cpfError,
+    }));
+  };
 
   const handleCEPLookup = async (cep: string) => {
     if (!cep) return;
@@ -197,6 +221,9 @@ export const ContactAdd: React.FC = () => {
   const formErrorMessage = errors['__main'];
 
   const additionalFieldProps: FormFieldInputProps<ContactAddForm> = {
+    cpf: {
+      onBlur: e => handleCPFValidate(e.target.value),
+    },
     cep: {
       onBlur: e => handleCEPLookup(e.target.value),
       ...dynamicCepProps,

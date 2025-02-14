@@ -1,36 +1,35 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
+import { useContacts } from '../contexts/contact/useContacts';
 import { Contact } from '../types/Contact';
 
-export const ContactService = {
-  addContact: (_userId: string, _contact: Contact): boolean => {
-    // if (!validateCPF(contact.cpf)) return false;
+export const useContactService = () => {
+  const context = useContacts();
 
-    // const users = getEntity('users') || [];
-    // const userIndex = users.findIndex((u: any) => u.id === userId);
+  const addContact = async (
+    _userId: string,
+    _contact: Omit<Contact, 'id' | 'userId'>
+  ): Promise<boolean> => {
+    try {
+      await context.addContact({
+        ..._contact,
+        userId: _userId,
+      });
+      return true;
+    } catch (error) {
+      console.error('Error adding contact:', error);
+      return false;
+    }
+  };
 
-    // if (userIndex === -1) return false;
-
-    // const existingCPF = users[userIndex].contacts?.some(
-    //   (c: Contact) => c.cpf === contact.cpf
-    // );
-    // if (existingCPF) return false;
-
-    // if (!users[userIndex].contacts) users[userIndex].contacts = [];
-    // users[userIndex].contacts.push({ ...contact, id: Date.now().toString() });
-
-    // storeEntity('users', users);
-    return true;
-  },
-
-  getContacts: (_userId: string): Contact[] => {
+  const getContacts = (_userId: string): Contact[] => {
     // const users = getEntity('users') || [];
     // const user = users.find((u: any) => u.id === userId);
     // return user ? user.contacts || [] : [];
     return [];
-  },
+  };
 
-  updateContact: (
+  const updateContact = (
     _userId: string,
     _contactId: string,
     _updatedContact: Contact
@@ -51,9 +50,9 @@ export const ContactService = {
     // };
     // storeEntity('users', users);
     return true;
-  },
+  };
 
-  deleteContact: (_userId: string, _contactId: string): boolean => {
+  const deleteContact = (_userId: string, _contactId: string): boolean => {
     // const users = getEntity('users') || [];
     // const userIndex = users.findIndex((u: any) => u.id === userId);
 
@@ -64,5 +63,12 @@ export const ContactService = {
     // );
     // storeEntity('users', users);
     return true;
-  },
+  };
+
+  return {
+    addContact,
+    getContacts,
+    updateContact,
+    deleteContact,
+  };
 };

@@ -3,6 +3,7 @@ export interface Contact {
   userId: string;
   name: string;
   cpf: string;
+  email: string;
   phone: string;
   address: {
     cep: string;

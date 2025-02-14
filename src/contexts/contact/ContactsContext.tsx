@@ -6,6 +6,8 @@ import { useAuth } from '../auth/useAuth';
 import { useInjection } from '../injection/useInjection';
 import { ContactsContext } from './useContacts';
 
+import { v4 as uuid } from 'uuid';
+
 export interface ContactsContextType {
   listContact: (contact?: EntityFilterFn<Contact>) => Promise<Contact[]>;
   getContact: (id: string) => Promise<Contact | undefined>;
@@ -47,7 +49,7 @@ export const ContactsProvider: React.FC<{
     const user = await getUser();
     return await contactsRepository.save(user, {
       ...contact,
-      id: crypto.randomUUID(),
+      id: uuid(),
     });
   };
 

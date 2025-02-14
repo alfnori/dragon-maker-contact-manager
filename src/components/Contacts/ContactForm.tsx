@@ -63,11 +63,6 @@ export const ContactForm: React.FC<ContactFormProps> = ({
   };
 
   const handleSubmit = () => {
-    if (!validateCPF(contact.cpf)) {
-      setError('Invalid CPF');
-      return;
-    }
-
     if (user) {
       const success = initialContact
         ? ContactService.updateContact(user.id!, contact.id, contact)

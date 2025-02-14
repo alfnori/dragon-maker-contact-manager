@@ -65,7 +65,7 @@ export const ContactsRepository = (
       };
 
       const existingContact = await userContacts(user, uniqueFn);
-      if (existingContact) {
+      if (existingContact.length) {
         throw new Error('CONTACT_ALREADY_EXISTS');
       }
 
@@ -83,7 +83,7 @@ export const ContactsRepository = (
     delete: async (user: User, id: string) => {
       const findId = (contact: Partial<Contact>) => contact.id === id;
       const existingContact = await userContacts(user, findId);
-      if (!existingContact) {
+      if (!existingContact.length) {
         throw new Error('CONTACT_NOT_EXISTS');
       }
 
